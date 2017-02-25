@@ -2,7 +2,7 @@
 	<div class="item-middle">
 	  <div class="col-xs-6 item-center">
 	    <button id="lamp_switcher" class="btn btn-default switch-button" type="submit">
-  	       <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+  	       <span class="glyphicon glyphicon-off <%= 'active' if @status == 'ON' %>" aria-hidden="true"></span>
         </button>
 	  </div>
 	</div>
