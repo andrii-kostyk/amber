@@ -1,0 +1,13 @@
+#lamp {
+	.switch-button {
+	   height: 100px;
+	   width: 100%;
+	   span {
+	      font-size: 30px;
+	      color: #f26122;
+	   }
+	   span.active {
+	     color: #00BFFF;
+	   }
+	}
+}

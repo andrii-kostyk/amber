@@ -1,0 +1,33 @@
+html, body {
+  height:100%;
+  min-height:100%;
+  position:relative;
+}
+
+.container-fluid {
+	padding: 0;
+}
+
+.full-height {
+    min-height: 100%;
+    height:auto !important;
+    height: 100%;
+}
+
+.item-center {
+  float: none;
+  margin: 0 auto;
+  display:table;
+}
+
+.item-middle {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.switch-panel {
+  display: table;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
