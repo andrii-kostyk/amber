@@ -64,8 +64,9 @@ Amber.RecognitionProcessor = function(amber) {
   	recognition.start();
   };
 
-  this.complete = function() {
-  	recognition.stop();
+  recognition.onend = function() {
+  	amber.performAction = amber.pendingAppeal;
+    recognition.start();
   };
 };
 
