@@ -83,10 +83,15 @@ Gray.RecognitionProcessor = function(gray) {
 
 Gray.ElementaryProcessor = function() {
   var utterance = new SpeechSynthesisUtterance();
+  console.log("utterance", utterance)
   
   utterance.lang = 'en-US';
-  utterance.onend = function () {};
-  utterance.onerror = function (e) {};
+  utterance.onend = function () {
+    console.log("speech end");
+  };
+  utterance.onerror = function (e) {
+    console.log("speech eror", e);
+  };
 
   this.speak = function(text) {
     utterance.text = text;
