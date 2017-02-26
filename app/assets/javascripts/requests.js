@@ -13,4 +13,18 @@ var Requests = new function() {
       }
     });
   };
+
+  this.sendCommand = function(command, success_callback, error_callback) {
+    $.ajax({
+      type: "post",
+      url: '/conversations/recognize',
+      data: { command: command},
+      dataType: "json",
+      error: function(response) { error_callback(error_message) },
+      success: function(response){
+        if(response && response.success) success_callback(response);
+        else error_callback(response)
+      }
+    });
+  };
 };

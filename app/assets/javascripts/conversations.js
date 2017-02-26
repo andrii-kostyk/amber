@@ -1,14 +1,14 @@
 $(document).on('ready page:load', function() {
-   if ( $("#conversation").length ) new Amber.Initialization();
+   if ( $("#conversation").length ) new Gray.Initialization();
 });
 
-var Amber = {};
+var Gray = {};
 
-Amber.Initialization = function() {
+Gray.Initialization = function() {
   var self = this;
 
-  $.extend(this, new Amber.ElementaryProcessor());
-  $.extend(this, new Amber.RecognitionProcessor(this));
+  $.extend(this, new Gray.ElementaryProcessor());
+  $.extend(this, new Gray.RecognitionProcessor(this));
 
   this.processRecognizedText = function(text) {
   	console.log(text)
@@ -23,26 +23,33 @@ Amber.Initialization = function() {
   	  function(response) {
   	  	self.speak(response.message);
         self.performAction = self.pendingAppeal;
+        window.location.reload(1);
   	  },
   	  function(response) {
         self.speak(response.message);
         self.performAction = self.pendingAppeal;
+        window.location.reload(1);
   	  }  
     );
   };
 
   this.pendingAppeal = function(text) {
-    if (text.match(/Амбер/)) {
-      self.speak("Wait a command");
+    if (text.match(/Грей/)) {
+      self.speak("Yes");
       self.performAction = self.sendCommand;
     }
   }
 
   this.performAction = this.pendingAppeal;
   this.listen();
+
+  setTimeout(function(){
+    self.speak("Reload");
+    window.location.reload(1);
+  }, 60000);
 };
 
-Amber.RecognitionProcessor = function(amber) {
+Gray.RecognitionProcessor = function(gray) {
   var self = this;
   var recognition = new webkitSpeechRecognition();
 
@@ -52,7 +59,7 @@ Amber.RecognitionProcessor = function(amber) {
 
   recognition.onresult = function(event) { 
     for (var i = event.resultIndex; i < event.results.length; ++i) {
-      if (event.results[i].isFinal) amber.processRecognizedText(event.results[i][0].transcript);
+      if (event.results[i].isFinal) gray.processRecognizedText(event.results[i][0].transcript);
     } 
   };
   
@@ -64,13 +71,17 @@ Amber.RecognitionProcessor = function(amber) {
   	recognition.start();
   };
 
+  this.stopListen = function(){
+    recognition.stop();
+  };
+
   recognition.onend = function() {
-  	amber.performAction = amber.pendingAppeal;
+  	gray.performAction = gray.pendingAppeal;
     recognition.start();
   };
 };
 
-Amber.ElementaryProcessor = function() {
+Gray.ElementaryProcessor = function() {
   var utterance = new SpeechSynthesisUtterance();
   
   utterance.lang = 'en-US';
