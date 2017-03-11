@@ -93,7 +93,7 @@ Gray.ElementaryProcessor = function() {
 
   this.say_yes = function() {
     reload = false;
-    play('http://' + window.location.host + '/speech/yes.wav')
+    play('https://' + window.location.host + '/speech/yes.wav')
   };
 
   this.speak = function(url) {

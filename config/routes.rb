@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get "/lamp", to: "lamp#index"
   post 'lamp/set_status'
   post 'conversations/recognize'
+  get 'conversations/client'
   root to: 'conversations#index'
 
   # The priority is based upon order of creation: first created -> highest priority.

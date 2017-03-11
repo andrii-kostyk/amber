@@ -49,7 +49,7 @@ module Recognize
     end
 
     def single file
-      "http://192.168.0.200:3000/speech/#{file}.wav"
+      "https://192.168.0.200:3000/speech/#{file}.wav"
     end
 	end
 end
