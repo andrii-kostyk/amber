@@ -11,31 +11,28 @@ Gray.Initialization = function() {
   $.extend(this, new Gray.RecognitionProcessor(this));
 
   this.processRecognizedText = function(text) {
-  	console.log(text)
     self.performAction(text);
   };
 
   this.inprogress = function() {};
 
   this.sendCommand = function(text) {
-  	self.performAction = self.inprogress;
-  	Requests.sendCommand(text,
-  	  function(response) {
-  	  	self.speak(response.message);
-        self.performAction = self.pendingAppeal;
-        window.location.reload(1);
-  	  },
-  	  function(response) {
+    self.performAction = self.inprogress;
+    Requests.sendCommand(text,
+      function(response) {
         self.speak(response.message);
         self.performAction = self.pendingAppeal;
-        window.location.reload(1);
-  	  }  
+      },
+      function(response) {
+        self.speak(response.message);
+        self.performAction = self.pendingAppeal;
+      }  
     );
   };
 
   this.pendingAppeal = function(text) {
     if (text.match(/Грей/)) {
-      self.speak("Yes");
+      self.say_yes();
       self.performAction = self.sendCommand;
     }
   }
@@ -68,7 +65,7 @@ Gray.RecognitionProcessor = function(gray) {
   }
 
   this.listen = function() {
-  	recognition.start();
+    recognition.start();
   };
 
   this.stopListen = function(){
@@ -76,25 +73,31 @@ Gray.RecognitionProcessor = function(gray) {
   };
 
   recognition.onend = function() {
-  	gray.performAction = gray.pendingAppeal;
+    gray.performAction = gray.pendingAppeal;
     recognition.start();
   };
 };
 
 Gray.ElementaryProcessor = function() {
-  var utterance = new SpeechSynthesisUtterance();
-  console.log("utterance", utterance)
-  
-  utterance.lang = 'en-US';
-  utterance.onend = function () {
-    console.log("speech end");
-  };
-  utterance.onerror = function (e) {
-    console.log("speech eror", e);
+  var audio = document.getElementById("gray-speech"),
+      reload = false;
+
+  audio.onended = function() {
+    if (reload) window.location.reload(1);
   };
 
-  this.speak = function(text) {
-    utterance.text = text;
-    speechSynthesis.speak(utterance);
+  function play(url) {
+    audio.src = url;
+    audio.play();
+  }
+
+  this.say_yes = function() {
+    reload = false;
+    play('http://' + window.location.host + '/speech/yes.wav')
+  };
+
+  this.speak = function(url) {
+    reload = true;
+    play(url);
   };
 };
