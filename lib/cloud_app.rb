@@ -47,6 +47,3 @@ class CloudApp
   end
 
 end
-
-#Cloud.new(host: "http://amber-cloud.space", name: "amber-cloud", user: "andriikostyk", password: "gray000")
-#app = CloudApp.new('amber-cloud')
