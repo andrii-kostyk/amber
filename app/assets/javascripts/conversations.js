@@ -33,7 +33,7 @@ Gray.Initialization = function() {
   this.pendingAppeal = function(text) {
     if (text.match(/Грей/)) {
       self.say_yes();
-      self.performAction = self.sendCommand;
+      self.sendCommand(text);
     }
   }
 
