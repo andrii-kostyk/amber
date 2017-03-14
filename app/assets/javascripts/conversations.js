@@ -41,7 +41,6 @@ Gray.Initialization = function() {
   this.listen();
 
   setTimeout(function(){
-    self.speak("Reload");
     window.location.reload(1);
   }, 60000);
   self.test_ua();
