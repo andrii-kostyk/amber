@@ -13,9 +13,9 @@ module Recognize
 
 	COMMANDS = {
       lamp: {
-      	on: { action: 'to', params: [:bedroom, :lamp, 'true'], response: { success: 'lamp is turned on' , error: "I cant turn on"} },
-        off: { action: 'to', params: [:bedroom, :lamp, 'false'], response: { success: 'lamp is turned off', error: "I cant turn off"}},
-        status: { action: 'get', params: [:bedroom, :lamp], response: { success: 'lamp is', error: "I cant retrieve status"}} 
+      	on: { action: 'to', params: [:bedroom, :lamp, 'true'], response: { success: 'Лампу включено' , error: "Я не можу включити лампу"} },
+        off: { action: 'to', params: [:bedroom, :lamp, 'false'], response: { success: 'Лампу виключено', error: "Я не можу виключити лампу"}},
+        status: { action: 'get', params: [:bedroom, :lamp], response: { success: 'Лампа ', error: "Я не можу отримати статус"}} 
       }
 	}.freeze
 
@@ -29,27 +29,19 @@ module Recognize
 
       if perform
          action_response = Switch.send(perform[:action], *perform[:params])
-         if action_response && action_response.kind_of?(String )
-            response_with_message(true, "#{perform[:response][:success]} #{action_response}")
+         if action_response && action_response.kind_of?(String)
+            _message = action_response == "ON" ? "включена" : "виключена"
+            { success: true, message: "#{perform[:response][:success]} #{_message}" }
          elsif action_response
-            response_with_message(true, perform[:response][:success])
+            { success: true, message: perform[:response][:success] }
          else
-            response_with_message(false, perform[:response][:error])
+            { success: false, message: perform[:response][:error] }
          end
       else
-        { success: false, message: single('und') }
+        { success: false, message: "Я вас не розумію" }
       end
     rescue
-        { success: false, message: single('wrong') }
+        { success: false, message: "Щось пішло нетак" }
 	  end
-
-    def response_with_message status, text
-      url = CloudApp.new('amber-cloud').tts(text)
-      { success: status, message: url }
-    end
-
-    def single file
-      "https://192.168.0.200:3000/speech/#{file}.wav"
-    end
 	end
 end

@@ -20,11 +20,11 @@ Gray.Initialization = function() {
     self.performAction = self.inprogress;
     Requests.sendCommand(text,
       function(response) {
-        self.speak(response.message);
+        self.speak(response.message, true);
         self.performAction = self.pendingAppeal;
       },
       function(response) {
-        self.speak(response.message);
+        self.speak(response.message, true);
         self.performAction = self.pendingAppeal;
       }  
     );
@@ -32,7 +32,7 @@ Gray.Initialization = function() {
 
   this.pendingAppeal = function(text) {
     if (text.match(/Грей/)) {
-      self.say_yes();
+      self.speak('Так', false);
       self.performAction = self.sendCommand;
     }
   }
@@ -44,6 +44,7 @@ Gray.Initialization = function() {
     self.speak("Reload");
     window.location.reload(1);
   }, 60000);
+  self.test_ua();
 };
 
 Gray.RecognitionProcessor = function(gray) {
@@ -86,18 +87,14 @@ Gray.ElementaryProcessor = function() {
     if (reload) window.location.reload(1);
   };
 
-  function play(url) {
-    audio.src = url;
-    audio.play();
+  function google_tts(text) {
+    var url = "http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=[_TTSTEXT_]&tl=Uk-ua"
+    return url.replace('[_TTSTEXT_]', text)
   }
 
-  this.say_yes = function() {
-    reload = false;
-    play('https://' + window.location.host + '/speech/yes.wav')
-  };
-
-  this.speak = function(url) {
-    reload = true;
-    play(url);
+  this.speak = function(text, _reload) {
+    reload = _reload;
+    audio.src = google_tts(text);
+    audio.play();
   };
 };
